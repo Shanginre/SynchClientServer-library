@@ -2,7 +2,7 @@
 
 ![Platform](https://img.shields.io/badge/Platform-win--32%7C64-lightgrey)
 [![License](https://img.shields.io/pypi/l/OPCDataTransfer)](https://en.wikipedia.org/wiki/MIT_License)
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Shanginre/AddInNative_SynchClientServer)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Shanginre/AddInNative_SynchClientServer)] (https://github.com/Shanginre/AddInNative_SynchClientServer/releases)
 
 Внешняя Native API компонента для 1C 8.3, которая реализует синхронный TCP сервер. Основное назначение компоненты - 
 работа в режиме TCP сервера, но она также может использоваться как TCP клиент. Компонента реализована на C++ 
