@@ -1,7 +1,6 @@
 # SynchClientServer library
 
-[![PyPI](https://img.shields.io/pypi/v/OPCDataTransfer)](https://pypi.org/project/OPCDataTransfer/)
-![Platform](https://img.shields.io/badge/Platform-win--32-lightgrey)
+![Platform](https://img.shields.io/badge/Platform-win--32-lightgrey)(https://img.shields.io/badge/Platform-win--32-lightgrey)
 [![License](https://img.shields.io/pypi/l/OPCDataTransfer)](https://en.wikipedia.org/wiki/MIT_License)
 
 Внешняя Native API компонента для 1C 8.3, которая реализует синхронный TCP сервер. Основное назначение компоненты - 
