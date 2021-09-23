@@ -1,0 +1,4 @@
+# general things to ignore
+/AddInNative_SynchClientServer*/.vs/
+/AddInNative_SynchClientServer*/bin*/
+/AddInNative_SynchClientServer*/build*/
