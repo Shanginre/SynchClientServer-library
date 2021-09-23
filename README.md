@@ -301,4 +301,4 @@ git checkout -b issue-9999
 
 1. [Boost](https://www.boost.org/), в частности [Boost.Asio](https://www.boost.org/doc/libs/1_75_0/doc/html/boost_asio/overview.html) -
 работа с TCP сокетами.
-2. [rapidjson](https://github.com/Tencent/rapidjson/) - работа с форматом JSON.
+2. [Rapidjson](https://github.com/Tencent/rapidjson/) - работа с форматом JSON.
