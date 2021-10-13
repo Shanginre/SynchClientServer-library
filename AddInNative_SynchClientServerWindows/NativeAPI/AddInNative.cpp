@@ -44,6 +44,7 @@ static const wchar_t *g_MethodNames[] = {
 	L"SendMessageToRemoteServer",
 	L"GetClientsState",
 	L"StopServer",
+	L"SendTerminationSignalToRunningInstanceOfServer",
 	L"GetLastLogRecords",
 };
 
@@ -61,6 +62,7 @@ static const wchar_t *g_MethodNamesRu[] = {
 	L"SendMessageToRemoteServer",
 	L"GetClientsState",
 	L"StopServer",
+	L"SendTerminationSignalToRunningInstanceOfServer",
 	L"GetLastLogRecords",
 };
 
@@ -340,6 +342,8 @@ long CAddInNative::GetNParams(const long lMethodNum)
 		return 0;
 	case eMethStopServer:
 		return 0;
+	case eMethSendTerminationSignalToRunningInstanceOfServer:
+		return 0;
 	case eMethGetLastLogRecords:
 		return 2;
 	default:
@@ -369,6 +373,7 @@ bool CAddInNative::GetParamDefValue(const long lMethodNum, const long lParamNum,
 	case eMethSendMessageToRemoteServer:
 	case eMethGetClientsState:
 	case eMethStopServer:
+	case eMethSendTerminationSignalToRunningInstanceOfServer:
 		// There are no parameter values by default 
 		break;
 	default:
@@ -424,6 +429,8 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
 	}
 	case eMethStopServer:
 		return synchClientServer_->stopServer();
+	case eMethSendTerminationSignalToRunningInstanceOfServer:
+		return synchClientServer_->sendTerminationSignalToRunningInstanceOfServer();
 	default:
 		return false;
 	}

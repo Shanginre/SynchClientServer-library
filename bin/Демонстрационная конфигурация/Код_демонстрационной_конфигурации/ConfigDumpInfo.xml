@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ConfigDumpInfo xmlns="http://v8.1c.ru/8.3/xcf/dumpinfo" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" format="Hierarchical" version="2.10">
+	<ConfigVersions>
+		<Metadata name="Catalog.ЭкземплярыАнализаторов" id="e1961bac-f6c4-42d5-afab-7d63e3be07de" configVersion="453548adb1ef5d4a8abbb45f6f23582100000000"/>
+		<Metadata name="Catalog.ЭкземплярыАнализаторов.Help" id="e1961bac-f6c4-42d5-afab-7d63e3be07de.1" configVersion="cb0095c1a8b46d40af266e26e29745e000000000"/>
+		<Metadata name="Catalog.ЭкземплярыАнализаторов.ObjectModule" id="e1961bac-f6c4-42d5-afab-7d63e3be07de.0" configVersion="fb0c80f995a0a1469ef08ef7e165631c00000000"/>
+		<Metadata name="CommonModule.бит_КомпонентаSynchClientServerКлиентСервер" id="d37721b9-f171-4187-b904-6a7dfdc18fa6" configVersion="e0a977774ce7bb46903d31241311a45500000000"/>
+		<Metadata name="CommonModule.бит_КомпонентаSynchClientServerКлиентСервер.Module" id="d37721b9-f171-4187-b904-6a7dfdc18fa6.0" configVersion="772187d56daded43a6d515c1909b9ccb00000000"/>
+		<Metadata name="CommonModule.бит_КомпонентаSynchClientServerЛокализацияКлиентСервер" id="ee85354f-7a8f-47e4-a3bb-810963589011" configVersion="7916d254a1389a4298ed2a0800ca6cf900000000"/>
+		<Metadata name="CommonModule.бит_КомпонентаSynchClientServerЛокализацияКлиентСервер.Module" id="ee85354f-7a8f-47e4-a3bb-810963589011.0" configVersion="502076156bf10a4d95aa0fb4a3998d3100000000"/>
+		<Metadata name="CommonModule.бит_КомпонентаSynchClientServerСервер" id="6656ef3a-a5af-4eed-bcfd-dfe3118ca7cf" configVersion="97c77576fb66864b9c335196b19c222400000000"/>
+		<Metadata name="CommonModule.бит_КомпонентаSynchClientServerСервер.Module" id="6656ef3a-a5af-4eed-bcfd-dfe3118ca7cf.0" configVersion="e8d60683c14d584b9cefcb798ebe4a8600000000"/>
+		<Metadata name="CommonTemplate.бит_КомпонентаSynchClientServer" id="1734870f-a5b9-458b-9243-6051422abc0a" configVersion="35615c0eb3cda94d8a0751543bca840c00000000"/>
+		<Metadata name="CommonTemplate.бит_КомпонентаSynchClientServer.Template" id="1734870f-a5b9-458b-9243-6051422abc0a.0" configVersion="52fe9e40ceb8864e998e5b36367aea9400000000"/>
+		<Metadata name="Configuration.Конфигурация" id="8204d2d0-2c32-4927-a800-fc2ac33b9be1" configVersion="7502b5f07322c342bb1176d20b37aa8300000000"/>
+		<Metadata name="Constant.бит_IPАдресКомпонентыСервера" id="f3c82df7-0e1f-46ee-80ef-257c1592d16f" configVersion="7ca473bda8fcf54c8ae6916ad6b1ef1400000000"/>
+		<Metadata name="Constant.бит_АдресУтилитыPDFtoTEXT" id="6f0f1a05-3828-4388-9b7f-67a7a03898fb" configVersion="e5dac9692679a84ba3d249dc796f23b300000000"/>
+		<Metadata name="Constant.бит_АдресФайлаЛоговКомпонентыСервера" id="5fba514f-81d0-4cba-adf5-d6adf26f867d" configVersion="96d5a5ab5aaf514b84fb5a7908b7725900000000"/>
+		<Metadata name="Constant.бит_ЛогироватьРаботуКомпонентыСервера" id="d19f4003-ce66-4b50-96ee-33629e9aeaad" configVersion="9bd2ab9afe6a9749a6972da9a2a2c43900000000"/>
+		<Metadata name="DataProcessor.бит_РаботаСКомпонентой" id="e81050cc-8674-4704-9ae5-004864d8efe9" configVersion="7f68429692160f4abc44fbfd39248c8700000000"/>
+		<Metadata name="DataProcessor.бит_РаботаСКомпонентой.Form.Форма" id="18a482d0-f262-443c-b5ab-876e3b7aca79" configVersion="94f11da788e062438adf00b224ebe4ad00000000"/>
+		<Metadata name="DataProcessor.бит_РаботаСКомпонентой.Form.Форма.Form" id="18a482d0-f262-443c-b5ab-876e3b7aca79.0" configVersion="fdc9d361b66ced4e9530396dfb8fc3ef00000000"/>
+		<Metadata name="Enum.бит_ВидыЛоговКомпонентыСервера" id="cb10fee0-c782-469f-8327-6fe98e6b9d3c" configVersion="375c9413402c8c4f8f441895e9da380200000000">
+			<Metadata name="Enum.бит_ВидыЛоговКомпонентыСервера.EnumValue.INFO" id="0125b3b9-ea14-4d99-983a-050368d1976a"/>
+			<Metadata name="Enum.бит_ВидыЛоговКомпонентыСервера.EnumValue.ERROR" id="5087ec46-a864-4a1d-9be4-bf34f9aff34e"/>
+		</Metadata>
+		<Metadata name="Enum.бит_ТипыПортовКомпонентыСервер" id="b76c5c0e-6239-4973-9da4-6528968e01ab" configVersion="01f50581639b834c9843bf61f87afd9400000000">
+			<Metadata name="Enum.бит_ТипыПортовКомпонентыСервер.EnumValue.UDP" id="06dc22e3-93b0-4b2d-8c69-21492d651bfb"/>
+			<Metadata name="Enum.бит_ТипыПортовКомпонентыСервер.EnumValue.TCP" id="eb414a07-a077-4d02-86e7-e85e34606703"/>
+			<Metadata name="Enum.бит_ТипыПортовКомпонентыСервер.EnumValue.COM" id="ee0352e9-95d9-4346-b7ba-3c05318e5c84"/>
+		</Metadata>
+		<Metadata name="InformationRegister.бит_ЛогиКомпонентыСервера" id="7b7a3767-1193-4bf0-a3ab-87673eb1563f" configVersion="1f2b77aeb0e7884d958618afa26aacd200000000">
+			<Metadata name="InformationRegister.бит_ЛогиКомпонентыСервера.Dimension.УникальныйИдентификаторЗаписи" id="3bfdb6a6-58cb-484d-adbd-2b2fd521f314"/>
+			<Metadata name="InformationRegister.бит_ЛогиКомпонентыСервера.Resource.Содержание" id="9a39c585-5b74-4d30-af5c-d2a385661584"/>
+			<Metadata name="InformationRegister.бит_ЛогиКомпонентыСервера.Resource.Время" id="ea5e8932-c8d2-4696-8ff3-c6c6d4bf6b90"/>
+			<Metadata name="InformationRegister.бит_ЛогиКомпонентыСервера.Resource.ВидЗаписи" id="f9aeff8f-ea5d-42fd-ba2a-6ac6f49caaf7"/>
+		</Metadata>
+		<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера" id="0a47a8b4-f0ed-45a7-8c80-9b6aa62e4be4" configVersion="288c8ddf8c96ec478079aa99865660ba00000000">
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Attribute.КоличествоПодключенныхКлиентов" id="14d34cef-6221-47f8-9243-4aec675fadf6"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Resource.СвязьСУдаленнымСервером" id="17b62a9f-44f4-4ff8-9676-fde6f807696a"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Resource.ДопустимоеВремяБезАктивности" id="64a17c54-1169-4ea8-a2d0-22a29113ba58"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Resource.ТипПорта" id="64d19196-f517-40ee-a65f-76217e043603"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Resource.ЭкземплярАнализатора" id="864dd4c0-a357-4cfa-8013-d41c9c00b306"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Dimension.Порт" id="8d8b46d5-700a-450e-9758-96a188fc96b8"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Resource.ЗадержкаОтветаКлиенту" id="9d64c59c-5096-424e-a289-1f5ca2ea08a4"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Attribute.ПоследняяАктивность" id="defe094f-2ac8-4ff5-9708-d225f9b8a278"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Resource.ЗадержкаЧтенияИзСокета" id="e0f2c8f5-9f84-4fc3-8bf1-12a583952d44"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Resource.АдресУдаленногоСервера" id="f28369b3-f359-42f0-8b2e-93d8c389bbfa"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Attribute.ПоследнееОбновлениеСостояния" id="f3d61c62-41f2-4e2f-af9a-3e9e407e3f00"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Attribute.ТекущееСостояниеОбщения" id="f5d30787-7b9c-4ee2-bd87-f031a293e676"/>
+			<Metadata name="InformationRegister.бит_ПараметрыКомпонентыСервера.Resource.Использовать" id="f5f41679-db35-4b05-a55a-f69db7603b09"/>
+		</Metadata>
+		<Metadata name="Language.Русский" id="2126d3bf-85f4-4a20-b0be-d83bbb36fa7a" configVersion="ca83ed407e10c74fa49ba5103c42aae000000000"/>
+		<Metadata name="Subsystem.бит_ИнтеграцияАнализаторов" id="e43f4d5c-37a8-42b0-bb56-d2f81cacb46a" configVersion="dc512b31d13aff4b8f2270f71311bb0500000000"/>
+		<Metadata name="Subsystem.бит_ИнтеграцияАнализаторов.CommandInterface" id="e43f4d5c-37a8-42b0-bb56-d2f81cacb46a.1" configVersion="ba5d56aeed7c7e4ea577e3899312dbf900000000"/>
+	</ConfigVersions>
+</ConfigDumpInfo>

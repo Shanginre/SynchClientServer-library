@@ -36,6 +36,7 @@ public:
 		eMethSendMessageToRemoteServer,
 		eMethGetClientsState,
 		eMethStopServer,
+		eMethSendTerminationSignalToRunningInstanceOfServer,
 		eMethGetLastLogRecords,
 		eMethLast     // Always last
     };

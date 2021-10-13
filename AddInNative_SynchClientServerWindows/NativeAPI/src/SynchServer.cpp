@@ -16,11 +16,7 @@
 
 SynchClientServer::~SynchClientServer()
 {
-	service_io.post([this]() {
-		work_io.reset(); // let io_service run out of work
-	});
-	service_io.stop();
-	stopServer();
+	terminateServer();
 }
 
 bool SynchClientServer::setServerParameters(const std::string &parametersString) {
@@ -33,6 +29,7 @@ bool SynchClientServer::setServerParameters(const std::string &parametersString)
 		&& isJsonFieldValid(serverParametersJson, "loggingRequired", BoolJson)
 		&& isJsonFieldValid(serverParametersJson, "logFileName", StringJson)
 		&& isJsonFieldValid(serverParametersJson, "memoryCleaningFrequency", IntJson)
+		&& isJsonFieldValid(serverParametersJson, "serverTerminationSignal", StringJson)
 		&& isJsonFieldValid(serverParametersJson, "ports", ArrayJson)) {
 	
 		std::string ipString = serverParametersJson["ip"].GetString();
@@ -43,8 +40,11 @@ bool SynchClientServer::setServerParameters(const std::string &parametersString)
 		logFileName = serverParametersJson["logFileName"].GetString();
 		loggingToFile = ! logFileName.empty();
 		memoryCleaningFrequency = serverParametersJson["memoryCleaningFrequency"].GetInt();
-	
+		serverTerminationSignal = serverParametersJson["serverTerminationSignal"].GetString();
+
 		successfully = jsonArrayToPortsSettingsMap(serverParametersJson, portsSettings);
+
+		state = READY;
 	}
 	else successfully = false;
 
@@ -60,7 +60,7 @@ std::string SynchClientServer::listen()
 	std::string errorDescription;
 	for (auto const& portSettingPair : portsSettings) {
 		portSettings_ptr setting_ptr = portSettingPair.second;
-		if (! setting_ptr->isLinkToRemoteServer && isPortAlreadyOpen(setting_ptr->portNumber)) {
+		if (! setting_ptr->isLinkToRemoteServer && isPortAlreadyOpened(setting_ptr->portNumber, false)) {
 			std::string portOpenError = std::to_string(setting_ptr->portNumber) + " port is already opened; ";
 			errorDescription.append(portOpenError);
 		}		
@@ -77,8 +77,10 @@ std::string SynchClientServer::listen()
 		}
 		threads.create_thread(boost::bind(&SynchClientServer::handle_connections_thread, this));
 		threads.create_thread(boost::bind(&SynchClientServer::clean_thread, this));
+		terminate_thread.create_thread(boost::bind(&SynchClientServer::checkForTerminate_thread, this));
 	
 		state = RUNNING;
+		serverNeedToTerminate = false;
 	}
 
 	// establish connections to remote servers
@@ -125,6 +127,12 @@ bool SynchClientServer::getMessagesFromClientsWhenArrive(std::string &incomingMe
         if (secondPassed > timeout)
             break;
     }
+
+	if (serverNeedToTerminate) {
+		// waiting for this instance of the server to process the terminate message
+		boost::this_thread::sleep(boost::posix_time::millisec(2000));
+		return false;
+	}
 
 	return true;
 }
@@ -267,31 +275,58 @@ std::string SynchClientServer::getClientsState()
 }
 
 bool SynchClientServer::stopServer()
-{
-	threads.interrupt_all();	
+{	
+	if (state != RUNNING)
+		return true;
+	
+	state = STOPED;
 
+	terminate_thread.interrupt_all();
+
+	threads.interrupt_all();	
 	// establish temporary connections on all server ports to exit loops in the accept_connections_thread thread, 
 	// since the acceptor.accept () method is blocking
 	for (auto const& portSettingPair : portsSettings) {
 		portSettings_ptr setting_ptr = portSettingPair.second;
-		isPortAlreadyOpen(setting_ptr->getPortNumber());
+		isPortAlreadyOpened(setting_ptr->getPortNumber(), false);
 	}
-
-	// sleep so that all threads get the interruption signal
-	//boost::this_thread::sleep(boost::posix_time::millisec(1000));
-
 	threads.join_all();
 
 	clientsConnections.clear();
 	incomingMessages.clear();
 	outgoingMessages.clear();
 
-	state = STOPED;
-
 	if (loggingRequired)
 		addLog("server has been stoped");
 
 	return true;
+}
+
+bool SynchClientServer::sendTerminationSignalToRunningInstanceOfServer()
+{	
+	for (auto const& portSettingPair : portsSettings) {
+		portSettings_ptr setting_ptr = portSettingPair.second;
+		
+		if (!setting_ptr->isLinkToRemoteServer) {
+			bool isOpened = isPortAlreadyOpened(setting_ptr->portNumber, true);
+		}
+	}
+
+	// waiting for another instance of the server to process the message
+	boost::this_thread::sleep(boost::posix_time::millisec(2000));
+
+	return true;
+}
+
+void SynchClientServer::terminateServer()
+{
+	std::unique_lock<std::mutex> lk(stopServer_mutex);
+
+	service_io.post([this]() {
+		work_io.reset(); // let io_service run out of work
+	});
+	service_io.stop();
+	stopServer();
 }
 
 void SynchClientServer::addLog(const std::string &recordBody)
@@ -448,6 +483,20 @@ void SynchClientServer::clean_thread()
 	}
 }
 
+void SynchClientServer::checkForTerminate_thread()
+{
+	while (true) {
+		boost::this_thread::sleep(boost::posix_time::millisec(1000));
+		if (isThreadInterrupted() || state == STOPED)
+			break;
+		
+		std::unique_lock<std::mutex> lk(classVariables_mutex);
+		if (serverNeedToTerminate) {
+			terminateServer();
+		}
+	}
+}
+
 bool SynchClientServer::allIncomingMessagesTakenInProcessing()
 {
 	return std::find_if(
@@ -461,10 +510,16 @@ void SynchClientServer::readMessageFromConnection(const clientConnection_ptr & c
 {
 	bool haveNewData = clientConnection->readDataFromSocket();
 	if (haveNewData) {
+		std::string bufferString = clientConnection->getBufferString();
+		if (isServerTerminationSignal(bufferString)) {
+			std::unique_lock<std::mutex> lk(classVariables_mutex);
+			serverNeedToTerminate = true;
+		}
+
 		message_ptr newMessage_(
 			new Message(INCOMMING,
 				generateNewUuidString(),
-				clientConnection->getBufferString(),
+				bufferString,
 				clientConnection->getPortNumber(),
 				clientConnection->getClientSocketUuidString())
 		);
@@ -496,7 +551,7 @@ void SynchClientServer::sendMessagesToConnection(const clientConnection_ptr & cl
 	}
 }
 
-bool SynchClientServer::isPortAlreadyOpen(int portNumber)
+bool SynchClientServer::isPortAlreadyOpened(int portNumber, bool needToTerminate)
 {
 	boost::asio::ip::tcp::endpoint ep(ip, portNumber);
 	boost::asio::ip::tcp::socket socket(service_io);
@@ -505,6 +560,9 @@ bool SynchClientServer::isPortAlreadyOpen(int portNumber)
 	if (err)
 		return false;
 	else {
+		if (needToTerminate) {
+			socket.write_some(boost::asio::buffer(serverTerminationSignal), err);
+		}
 		socket.close();
 		return true;
 	}
@@ -569,6 +627,10 @@ const portSettings_ptr SynchClientServer::getPortSettings(int portNumber)
 	}
 }
 
+bool SynchClientServer::isServerTerminationSignal(const std::string & record)
+{
+	return record == serverTerminationSignal;
+}
 
 //---------------------------------------------------------------------------//
 // ClientConnection methods

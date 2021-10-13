@@ -34,6 +34,7 @@ enum MessageDirectionEnum
 
 enum ServerStateEnum
 {
+	READY,
 	STOPED,
 	RUNNING
 };
@@ -65,8 +66,10 @@ public:
 	bool sendMessageToClient(const std::string &outgoingMessagesJsonString);
 	bool sendMessageToRemoteServer(const std::string &outgoingMessagesJsonString);
 	std::string getClientsState();
+	ServerStateEnum getServerState() { return state; }
 	std::string getLastRecordsFromLogHistory(int recordsNumber, bool onlyNew=true);
 	bool stopServer();
+	bool sendTerminationSignalToRunningInstanceOfServer();
 
 	bool getLoggingRequired();
 	void setLoggingRequired(bool _loggingRequired);	
@@ -78,13 +81,16 @@ private:
 	void accept_connections_thread(const portSettings_ptr & portSettings);
 	void handle_connections_thread();
 	void clean_thread();
+	void checkForTerminate_thread();
 	bool allIncomingMessagesTakenInProcessing();
 	void readMessageFromConnection(const clientConnection_ptr &clientConnection);
 	void sendMessagesToConnection(const clientConnection_ptr &clientConnection);
-	bool isPortAlreadyOpen(int portNumber);
+	bool isPortAlreadyOpened(int portNumber, bool needToTerminate);
 	void prosessLastRecordsFromLogHistory(const std::vector<logRecord_ptr> &logHistory, int recordsNumber, bool onlyNew);
 	const clientConnection_ptr getCreateClientConnectionToRemoteServer(const portSettings_ptr & portSettings);
 	const portSettings_ptr getPortSettings(int portNumber);
+	bool isServerTerminationSignal(const std::string &record);
+	void terminateServer();
 private:
 	boost::asio::io_service service_io;
 	boost::optional<boost::asio::io_service::work> work_io{ service_io };
@@ -94,11 +100,13 @@ private:
 	std::vector<message_ptr> incomingMessages;
 	std::vector<message_ptr> outgoingMessages;
 	boost::thread_group threads;
+	boost::thread_group terminate_thread;
 	std::mutex connections_mutex;
 	std::mutex incomingMessages_mutex;
 	std::mutex outgoingMessages_mutex;
 	std::mutex logHistory_mutex;
 	std::mutex classVariables_mutex;
+	std::mutex stopServer_mutex;
 
 	ServerStateEnum state;
 	bool loggingRequired;
@@ -106,6 +114,8 @@ private:
 	std::string logFileName;
 	std::vector<logRecord_ptr> logHistory;
 	int memoryCleaningFrequency;
+	std::string serverTerminationSignal;
+	bool serverNeedToTerminate;
 };
 
 class ClientConnection {
