@@ -82,6 +82,7 @@ private:
 	void handle_connections_thread();
 	void clean_thread();
 	void checkForTerminate_thread();
+	void reconnectToRemoteServers_thread();
 	bool allIncomingMessagesTakenInProcessing();
 	void readMessageFromConnection(const clientConnection_ptr &clientConnection);
 	void sendMessagesToConnection(const clientConnection_ptr &clientConnection);

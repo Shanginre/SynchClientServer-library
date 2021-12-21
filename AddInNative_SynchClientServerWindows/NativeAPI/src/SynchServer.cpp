@@ -77,6 +77,7 @@ std::string SynchClientServer::listen()
 		}
 		threads.create_thread(boost::bind(&SynchClientServer::handle_connections_thread, this));
 		threads.create_thread(boost::bind(&SynchClientServer::clean_thread, this));
+		threads.create_thread(boost::bind(&SynchClientServer::reconnectToRemoteServers_thread, this));
 		terminate_thread.create_thread(boost::bind(&SynchClientServer::checkForTerminate_thread, this));
 	
 		state = RUNNING;
@@ -493,6 +494,22 @@ void SynchClientServer::checkForTerminate_thread()
 		std::unique_lock<std::mutex> lk(classVariables_mutex);
 		if (serverNeedToTerminate) {
 			terminateServer();
+		}
+	}
+}
+
+void SynchClientServer::reconnectToRemoteServers_thread()
+{
+	while (true) {
+		boost::this_thread::sleep(boost::posix_time::millisec(10000));
+		if (isThreadInterrupted())
+			break;
+
+		for (auto const& portSettingPair : portsSettings) {
+			portSettings_ptr setting_ptr = portSettingPair.second;
+			if (setting_ptr->isLinkToRemoteServer) {
+				clientConnection_ptr connectionToRemoteServer = getCreateClientConnectionToRemoteServer(setting_ptr);
+			}
 		}
 	}
 }
