@@ -16,10 +16,9 @@ enum Interfaces
 {
     eIMsgBox = 0,
     eIPlatformInfo,
-#if defined(__ANDROID__)
+
     eIAndroidComponentHelper,
-#endif    
-    eIConnectInfo,
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -152,14 +151,5 @@ struct IPlatformInfo :
 
     virtual const AppInfo* ADDIN_API GetPlatformInfo() = 0;
 };
-struct IConnectInfo :
-    public IInterface
-{
-    enum ConnectType
-    {
-        eConnectedIsolated = 0,
-        eConnectedNotIsolated,
-    };
-    virtual const ConnectType ADDIN_API GetConnectInfo() = 0;
-};
+
 #endif //__ADAPTER_DEF_H__

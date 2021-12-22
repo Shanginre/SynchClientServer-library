@@ -81,7 +81,7 @@ Document constructJson(const std::vector<logRecord_ptr> &logHistory, int records
 	for (auto it = logHistory.rbegin(); it != logHistory.rend(); ++it) {
 		Value arrRow(kObjectType);
 
-		if (onlyNew && (*it)->isLogRecordProcessingÑompleted())
+		if (onlyNew && (*it)->isLogRecordProcessingCompleted())
 			continue;
 
 		std::string typeString = (*it)->getTypeInStringFormat();

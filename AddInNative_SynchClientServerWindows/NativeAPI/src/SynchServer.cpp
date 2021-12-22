@@ -466,7 +466,7 @@ void SynchClientServer::clean_thread()
 			std::remove_if(
 				incomingMessages.begin(),
 				incomingMessages.end(),
-				boost::bind(&Message::isMessageProcessing—ompleted, _1)
+				boost::bind(&Message::isMessageProcessingCompleted, _1)
 			),
 			incomingMessages.end()
 		);
@@ -476,7 +476,7 @@ void SynchClientServer::clean_thread()
 			std::remove_if(
 				outgoingMessages.begin(),
 				outgoingMessages.end(),
-				boost::bind(&Message::isMessageProcessing—ompleted, _1)
+				boost::bind(&Message::isMessageProcessingCompleted, _1)
 			),
 			outgoingMessages.end()
 		);
@@ -556,7 +556,7 @@ void SynchClientServer::sendMessagesToConnection(const clientConnection_ptr & cl
 		bool isMessageForThisConnection = clientSocketUuidString == m_clientSocketUuidString;
 
 		if (isMessageForThisConnection
-			&& !message_ptr->isMessageProcessing—ompleted()) {		
+			&& !message_ptr->isMessageProcessingCompleted()) {		
 			message_ptr->takeMesssageInProsessing();
 			clientConnection->sendMessage(message_ptr, sendWithDelay);
 			message_ptr->completeProsessingMesssage();
@@ -589,7 +589,7 @@ void SynchClientServer::prosessLastRecordsFromLogHistory(const std::vector<logRe
 {
 	int recordsCount = 0;
 	for (auto it = logHistory.rbegin(); it != logHistory.rend(); ++it) {
-		if (onlyNew && (*it)->isLogRecordProcessing—ompleted())
+		if (onlyNew && (*it)->isLogRecordProcessingCompleted())
 			continue;
 
 		(*it)->completeProsessingLogRecord();
@@ -907,7 +907,7 @@ Message::Message(MessageDirectionEnum _direction, std::string _messageUuidString
 	portNumber(_portNumber), clientSocketUuidString(_clientSocketUuidString){
 	
 	takenInProcessing_ = false;
-	processing—ompleted_ = false;
+	processingCompleted_ = false;
 }
 
 
@@ -920,7 +920,7 @@ LogRecord::LogRecord(const std::string &logBody_, LogTypeEnum type_)
 {
 	timePoint = boost::posix_time::second_clock::local_time();
 	logRecordUuidString = generateNewUuidString();
-	processing—ompleted_ = false;
+	processingCompleted_ = false;
 }
 
 std::string LogRecord::getTypeInStringFormat()

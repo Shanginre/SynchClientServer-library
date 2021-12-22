@@ -182,9 +182,9 @@ struct Message
 		const std::string &messageBody, int portNumber, std::string clientSocketUuidString);
 
 	bool isMessageInProcessing()		{ return takenInProcessing_; }
-	bool isMessageProcessing—ompleted() { return processing—ompleted_; }
+	bool isMessageProcessingCompleted() { return processingCompleted_; }
 	void takeMesssageInProsessing()		{ takenInProcessing_ = true; }
-	void completeProsessingMesssage()	{ processing—ompleted_ = true; }
+	void completeProsessingMesssage()	{ processingCompleted_ = true; }
 	const std::string & getClientSocketUuidStringRef() { return clientSocketUuidString; }
 
 	MessageDirectionEnum direction;
@@ -194,7 +194,7 @@ struct Message
 	std::string clientSocketUuidString;
 private:
 	bool takenInProcessing_;
-	bool processing—ompleted_;
+	bool processingCompleted_;
 };
 
 struct LogRecord
@@ -206,12 +206,12 @@ struct LogRecord
 	boost::posix_time::ptime timePoint;
 	std::string logRecordUuidString;
 
-	bool isLogRecordProcessing—ompleted()	{ return processing—ompleted_; }
-	void completeProsessingLogRecord()		{ processing—ompleted_ = true; }
+	bool isLogRecordProcessingCompleted()	{ return processingCompleted_; }
+	void completeProsessingLogRecord()		{ processingCompleted_ = true; }
 	std::string getTypeInStringFormat();
 	std::string getTimePointInStringFormat();
 private:
-	bool processing—ompleted_;
+	bool processingCompleted_;
 };
 
 std::string generateNewUuidString();
