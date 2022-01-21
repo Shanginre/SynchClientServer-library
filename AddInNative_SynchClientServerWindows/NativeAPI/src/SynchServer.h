@@ -89,14 +89,14 @@ private:
 	bool isPortAlreadyOpened(int portNumber, bool needToTerminate);
 	void prosessLastRecordsFromLogHistory(const std::vector<logRecord_ptr> &logHistory, int recordsNumber, bool onlyNew);
 	const clientConnection_ptr getCreateClientConnectionToRemoteServer(const portSettings_ptr & portSettings);
-	const portSettings_ptr getPortSettings(int portNumber);
+	const portSettings_ptr getPortSettings(int portNumber, std::string remoteIP);
 	bool isServerTerminationSignal(const std::string &record);
 	void terminateServer();
 private:
 	boost::asio::io_service service_io;
 	boost::optional<boost::asio::io_service::work> work_io{ service_io };
 	boost::asio::ip::address_v4 ip;
-	std::map<int, portSettings_ptr> portsSettings;
+	std::map<std::pair<int, std::string>, portSettings_ptr> portsSettings;
 	std::vector<clientConnection_ptr> clientsConnections;
 	std::vector<message_ptr> incomingMessages;
 	std::vector<message_ptr> outgoingMessages;
@@ -136,6 +136,7 @@ public:
 	std::string getLastActivityTimeInStringFormat();
 	const std::string & getClientSocketUuidString() { return clientSocketUuidString_; }
 	int getPortNumber() { return portNumber_; }
+	std::string getRemoteIP() { return remoteIP_; }
 	bool isLinkToRemoteServer() { return isLinkToRemoteServer_; }
 	bool getConnectionAccepted() { return connectionAccepted_; }
 	std::string getBufferString();
@@ -179,7 +180,7 @@ private:
 struct Message
 {
 	Message(MessageDirectionEnum direction, std::string messageUuidString, 
-		const std::string &messageBody, int portNumber, std::string clientSocketUuidString);
+		const std::string &messageBody, int portNumber, std::string remoteIP, std::string clientSocketUuidString);
 
 	bool isMessageInProcessing()		{ return takenInProcessing_; }
 	bool isMessageProcessingCompleted() { return processingCompleted_; }
@@ -191,6 +192,7 @@ struct Message
 	std::string messageUuidString;
 	std::string messageBody;	
 	int portNumber;
+	std::string remoteIP;
 	std::string clientSocketUuidString;
 private:
 	bool takenInProcessing_;

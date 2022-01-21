@@ -18,7 +18,7 @@ rapidjson::Document constructJson(const std::vector<clientConnection_ptr> &clien
 rapidjson::Document constructJson(const std::vector<logRecord_ptr> &logsHistory, int recordsNumber, bool onlyNew);
 std::string errorDescriptionToJsonString(const std::string &errorDescriptionString);
 bool jsonArrayToPortsSettingsMap(const rapidjson::Document &serverParametersJson, 
-	std::map<int, portSettings_ptr> &portsSettingsMap);
+	std::map<std::pair<int, std::string>, portSettings_ptr> &portsSettingsMap);
 bool jsonArrayToSetOfUuidAckMessages(const rapidjson::Document &docJson, std::set<std::string> &messagesUuidSet);
 rapidjson::Document convertStringToJsonDocument(const std::string &message);
 

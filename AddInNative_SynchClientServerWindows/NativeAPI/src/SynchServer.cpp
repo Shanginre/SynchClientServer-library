@@ -53,11 +53,13 @@ bool SynchClientServer::setServerParameters(const std::string &parametersString)
 
 std::string SynchClientServer::listen()
 {
+	std::string errorDescription;
+	
 	if (state == RUNNING)
-		return false;
+		return errorDescription;
 
 	// if at least one port (internal) is already open, then the server cannot be started
-	std::string errorDescription;
+	
 	for (auto const& portSettingPair : portsSettings) {
 		portSettings_ptr setting_ptr = portSettingPair.second;
 		if (! setting_ptr->isLinkToRemoteServer && isPortAlreadyOpened(setting_ptr->portNumber, false)) {
@@ -105,7 +107,7 @@ std::string SynchClientServer::listen()
 
 bool SynchClientServer::getMessagesFromClientsWhenArrive(std::string &incomingMessagesJsonString, int checkFrequency, int timeout)
 {
-	boost::posix_time::ptime lastPulseTime = boost::posix_time::second_clock::local_time();
+	const boost::posix_time::ptime lastPulseTime = boost::posix_time::second_clock::local_time();
 
     while (true)
     {
@@ -123,8 +125,8 @@ bool SynchClientServer::getMessagesFromClientsWhenArrive(std::string &incomingMe
             break;
         }
 
-        boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
-        long long secondPassed = (now - lastPulseTime).total_milliseconds();
+		const boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+		const long long secondPassed = (now - lastPulseTime).total_milliseconds();
         if (secondPassed > timeout)
             break;
     }
@@ -169,12 +171,12 @@ bool SynchClientServer::ackMessagesReceipt(const std::string &messagesUuidJsonSt
 		successfully = jsonArrayToSetOfUuidAckMessages(messagesUuidJson, messagesUuidSet);
 		
 		if (successfully) {
-			int setSize = static_cast<int>(messagesUuidSet.size());
+			const int setSize = static_cast<int>(messagesUuidSet.size());
 
 			std::unique_lock<std::mutex> lk(incomingMessages_mutex);
 			int messageCount = 0;
 			for (auto const& message_ptr : incomingMessages) {
-				bool isMessageUuidInSet = messagesUuidSet.find(message_ptr->messageUuidString) != messagesUuidSet.end();
+				const bool isMessageUuidInSet = messagesUuidSet.find(message_ptr->messageUuidString) != messagesUuidSet.end();
 				if (isMessageUuidInSet) {
 					message_ptr->completeProsessingMesssage();
 					messageCount++;
@@ -200,16 +202,18 @@ bool SynchClientServer::sendMessageToClient(const std::string &outgoingMessagesJ
 		&& isJsonFieldValid(messageJson, "portNumber", IntJson)
 		&& isJsonFieldValid(messageJson, "clientSocketUuidString", StringJson)) {
 
-		std::string messageUuidString = messageJson["messageUuidString"].GetString();
-		std::string messageBody = messageJson["messageBody"].GetString();
-		int portNumber = messageJson["portNumber"].GetInt();
-		std::string clientSocketUuidString = messageJson["clientSocketUuidString"].GetString();
+		const std::string messageUuidString = messageJson["messageUuidString"].GetString();
+		const std::string messageBody = messageJson["messageBody"].GetString();
+		const int portNumber = messageJson["portNumber"].GetInt();
+		const std::string clientSocketUuidString = messageJson["clientSocketUuidString"].GetString();
+		const std::string remoteIP;
 
 		message_ptr newMessage_(
 			new Message(OUTGOING,
 				messageUuidString,
 				messageBody,
 				portNumber,
+				remoteIP,
 				clientSocketUuidString)
 		);
 
@@ -227,13 +231,15 @@ bool SynchClientServer::sendMessageToRemoteServer(const std::string &outgoingMes
 	if (messageJson.IsObject()
 		&& isJsonFieldValid(messageJson, "messageUuidString", StringJson)
 		&& isJsonFieldValid(messageJson, "messageBody", StringJson)
-		&& isJsonFieldValid(messageJson, "portNumber", IntJson)) {
+		&& isJsonFieldValid(messageJson, "portNumber", IntJson)
+		&& isJsonFieldValid(messageJson, "remoteIP", StringJson)) {
 		
-		std::string messageUuidString = messageJson["messageUuidString"].GetString();
-		std::string messageBody = messageJson["messageBody"].GetString();
-		int portNumber = messageJson["portNumber"].GetInt();
+		const std::string messageUuidString = messageJson["messageUuidString"].GetString();
+		const std::string messageBody = messageJson["messageBody"].GetString();
+		const std::string remoteIP = messageJson["remoteIP"].GetString();
+		const int portNumber = messageJson["portNumber"].GetInt();
 		
-		portSettings_ptr portSettings = getPortSettings(portNumber);
+		portSettings_ptr portSettings = getPortSettings(portNumber, remoteIP);
 		if (! portSettings) {
 			if (loggingRequired)
 				addLog(std::to_string(portNumber) + " can not find any portSettings by port number");
@@ -253,6 +259,7 @@ bool SynchClientServer::sendMessageToRemoteServer(const std::string &outgoingMes
 				messageUuidString,
 				messageBody,
 				portNumber,
+				remoteIP,
 				clientSocketUuidString)
 		);
 		std::unique_lock<std::mutex> lk(outgoingMessages_mutex);
@@ -309,7 +316,7 @@ bool SynchClientServer::sendTerminationSignalToRunningInstanceOfServer()
 		portSettings_ptr setting_ptr = portSettingPair.second;
 		
 		if (!setting_ptr->isLinkToRemoteServer) {
-			bool isOpened = isPortAlreadyOpened(setting_ptr->portNumber, true);
+			const bool isOpened = isPortAlreadyOpened(setting_ptr->portNumber, true);
 		}
 	}
 
@@ -538,6 +545,7 @@ void SynchClientServer::readMessageFromConnection(const clientConnection_ptr & c
 				generateNewUuidString(),
 				bufferString,
 				clientConnection->getPortNumber(),
+				clientConnection->getRemoteIP(),
 				clientConnection->getClientSocketUuidString())
 		);
 		std::unique_lock<std::mutex> lk(incomingMessages_mutex);
@@ -605,8 +613,9 @@ const clientConnection_ptr SynchClientServer::getCreateClientConnectionToRemoteS
 	std::unique_lock<std::mutex> lk_connections(connections_mutex);
 	
 	int portNumber = portSettings->getPortNumber();
+	std::string remoteIP = portSettings->getRemoteIP();
 	for (auto it = clientsConnections.rbegin(); it != clientsConnections.rend(); ++it) {
-		if ((*it)->getPortNumber() == portNumber) {
+		if ((*it)->getPortNumber() == portNumber && (*it)->getRemoteIP() == remoteIP) {
 			return *it;
 		}
 	}
@@ -633,9 +642,9 @@ const clientConnection_ptr SynchClientServer::getCreateClientConnectionToRemoteS
 	}
 }
 
-const portSettings_ptr SynchClientServer::getPortSettings(int portNumber)
+const portSettings_ptr SynchClientServer::getPortSettings(int portNumber, std::string remoteIP)
 {
-	std::map<int, portSettings_ptr>::iterator pos = portsSettings.find(portNumber);
+	std::map<std::pair<int, std::string>, portSettings_ptr>::iterator pos = portsSettings.find(std::make_pair(portNumber, remoteIP));
 	if (pos == portsSettings.end()) {
 		return std::shared_ptr<PortSettings>(nullptr);
 	}
@@ -815,8 +824,8 @@ bool ClientConnection::reconnectSocketRemoteServer()
 
 bool ClientConnection::isTimedOut()
 {
-	boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
-	long long ms = (now - lastActivityTime_).total_milliseconds();
+	const boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+	const long long ms = (now - lastActivityTime_).total_milliseconds();
 	return ms > allowedTimeNoActivity_;
 }
 
@@ -902,9 +911,9 @@ void PortSettings::setPortTypeFromString(std::string portTypeString)
 //---------------------------------------------------------------------------//
 
 Message::Message(MessageDirectionEnum _direction, std::string _messageUuidString,
-	const std::string &_messageBody, int _portNumber, std::string _clientSocketUuidString)
+	const std::string &_messageBody, int _portNumber, std::string _remoteIP, std::string _clientSocketUuidString)
 	: direction(_direction), messageUuidString(_messageUuidString), messageBody(_messageBody), 
-	portNumber(_portNumber), clientSocketUuidString(_clientSocketUuidString){
+	portNumber(_portNumber), remoteIP(_remoteIP), clientSocketUuidString(_clientSocketUuidString){
 	
 	takenInProcessing_ = false;
 	processingCompleted_ = false;

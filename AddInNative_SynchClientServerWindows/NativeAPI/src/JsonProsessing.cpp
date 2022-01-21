@@ -35,6 +35,10 @@ Document constructJson(const std::vector<message_ptr> &incomingMessages, bool on
 		
 		arrRow.AddMember("portNumber", Value().SetInt(message->portNumber), document.GetAllocator());
 		
+		std::string remoteIP = message->remoteIP;
+		json_val.SetString(remoteIP.c_str(), remoteIP.length(), allocator);
+		arrRow.AddMember("remoteIP", json_val, document.GetAllocator());
+
 		arrJson.PushBack(arrRow, allocator);
 	}
 	document.AddMember("incomingMessages", arrJson, allocator);
@@ -113,7 +117,7 @@ Document constructJson(const std::vector<logRecord_ptr> &logHistory, int records
 
 std::string errorDescriptionToJsonString(const std::string & errorDescriptionString)
 {
-	bool successfully = errorDescriptionString.empty();
+	const bool successfully = errorDescriptionString.empty();
 	
 	Document document;
 	document.SetObject();
@@ -130,7 +134,7 @@ std::string errorDescriptionToJsonString(const std::string & errorDescriptionStr
 }
 
 bool jsonArrayToPortsSettingsMap(const rapidjson::Document &serverParametersJson, 
-	std::map<int, portSettings_ptr> &portsSettingsMap) {
+	std::map<std::pair<int, std::string>, portSettings_ptr> &portsSettingsMap) {
 	bool successfully = true;
 	for (const auto& portSettingJson : serverParametersJson["ports"].GetArray()) {
 		if (isJsonFieldValid(portSettingJson, "portType", StringJson)
@@ -141,18 +145,18 @@ bool jsonArrayToPortsSettingsMap(const rapidjson::Document &serverParametersJson
 			&& isJsonFieldValid(portSettingJson, "delayMessageSending", IntJson)
 			&& isJsonFieldValid(portSettingJson, "allowedTimeNoActivity", IntJson)) {
 
-			std::string portTypeString = portSettingJson["portType"].GetString();
-			bool isLinkToRemoteServer = portSettingJson["isLinkToRemoteServer"].GetBool();
-			std::string remoteIP = portSettingJson["remoteIP"].GetString();
-			int portNumber = portSettingJson["portNumber"].GetInt();
-			int delayReadingFromSocket = portSettingJson["delayReadingFromSocket"].GetInt();
-			int delayMessageSending = portSettingJson["delayMessageSending"].GetInt();
-			int allowedTimeNoActivity = portSettingJson["allowedTimeNoActivity"].GetInt();
+			const std::string portTypeString = portSettingJson["portType"].GetString();
+			const bool isLinkToRemoteServer = portSettingJson["isLinkToRemoteServer"].GetBool();
+			const std::string remoteIP = portSettingJson["remoteIP"].GetString();
+			const int portNumber = portSettingJson["portNumber"].GetInt();
+			const int delayReadingFromSocket = portSettingJson["delayReadingFromSocket"].GetInt();
+			const int delayMessageSending = portSettingJson["delayMessageSending"].GetInt();
+			const int allowedTimeNoActivity = portSettingJson["allowedTimeNoActivity"].GetInt();
 
 			portSettings_ptr portSetting_(
 				new PortSettings(portNumber, isLinkToRemoteServer, remoteIP, portTypeString, delayReadingFromSocket, delayMessageSending, allowedTimeNoActivity)
 			);
-			portsSettingsMap.insert(std::make_pair(portNumber, portSetting_));
+			portsSettingsMap.insert(std::make_pair(std::make_pair(portNumber, remoteIP), portSetting_));
 		}
 		else
 		{
