@@ -30,6 +30,11 @@
 						</Button>
 					</ChildItems>
 				</UsualGroup>
+				<Button name="ЗапуститьКомпонентуВРежимеОтладки" id="15">
+					<Type>UsualButton</Type>
+					<CommandName>Form.Command.ЗапуститьКомпонентуВРежимеОтладки</CommandName>
+					<ExtendedTooltip name="ЗапуститьКомпонентуВРежимеОтладкиРасширеннаяПодсказка" id="16"/>
+				</Button>
 				<Button name="ЗапуститьСерверНаКлиенте" id="11">
 					<Type>UsualButton</Type>
 					<CommandName>Form.Command.ЗапуститьКомпонентуНаКлиенте</CommandName>
@@ -91,6 +96,21 @@
 				</v8:item>
 			</ToolTip>
 			<Action>ЗапуститьКомпонентуНаКлиенте</Action>
+		</Command>
+		<Command name="ЗапуститьКомпонентуВРежимеОтладки" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запустить компоненту (режим отладки)</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запустить компоненту в режиме отладки</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ЗапуститьКомпонентуВРежимеОтладки</Action>
 		</Command>
 	</Commands>
 </Form>
