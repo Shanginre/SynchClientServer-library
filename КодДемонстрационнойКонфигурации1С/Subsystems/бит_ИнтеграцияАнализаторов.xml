@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.10">
+	<Subsystem uuid="e43f4d5c-37a8-42b0-bb56-d2f81cacb46a">
+		<Properties>
+			<Name>бит_ИнтеграцияАнализаторов</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Интеграция анализаторов (БИТ)</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment/>
+			<IncludeHelpInContents>true</IncludeHelpInContents>
+			<IncludeInCommandInterface>true</IncludeInCommandInterface>
+			<Explanation/>
+			<Picture/>
+			<Content>
+				<xr:Item xsi:type="xr:MDObjectRef">Constant.бит_ЛогироватьРаботуКомпонентыСервера</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">Constant.бит_IPАдресКомпонентыСервера</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.бит_РаботаСКомпонентой</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">InformationRegister.бит_ПараметрыКомпонентыСервера</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">1a091b90-a003-450c-afe4-c836332c0f04</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">InformationRegister.бит_ЛогиКомпонентыСервера</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">Constant.бит_АдресУтилитыPDFtoTEXT</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">Catalog.ЭкземплярыАнализаторов</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">60329c00-483b-4678-b78e-9f0418ea11d1</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">0c721333-3082-4bad-8a3a-f5d49d477cab</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">12d9825a-e976-4592-b447-17ae79696b0b</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">f6ba9955-35ea-4638-8a3f-602202c607a5</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">Constant.бит_АдресФайлаЛоговКомпонентыСервера</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">29b79143-8883-4204-9c3d-91b2558994a1</xr:Item>
+			</Content>
+		</Properties>
+		<ChildObjects/>
+	</Subsystem>
+</MetaDataObject>
