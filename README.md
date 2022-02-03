@@ -1,7 +1,7 @@
 # SynchClientServer library
 
-![Platform](https://img.shields.io/badge/-win--32%7C64-lightgrey)
 ![Platform](https://img.shields.io/badge/-Linux-green)
+![Platform](https://img.shields.io/badge/-win--32%7C64-lightgrey)
 [![License](https://img.shields.io/pypi/l/OPCDataTransfer)](https://en.wikipedia.org/wiki/MIT_License)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Shanginre/AddInNative_SynchClientServer)](https://github.com/Shanginre/AddInNative_SynchClientServer/releases)
 
