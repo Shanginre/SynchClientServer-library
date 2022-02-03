@@ -1,6 +1,7 @@
 # SynchClientServer library
 
 ![Platform](https://img.shields.io/badge/Platform-win--32%7C64-lightgrey)
+![Platform](https://img.shields.io/badge/Platform-Linux-green)
 [![License](https://img.shields.io/pypi/l/OPCDataTransfer)](https://en.wikipedia.org/wiki/MIT_License)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Shanginre/AddInNative_SynchClientServer)](https://github.com/Shanginre/AddInNative_SynchClientServer/releases)
 
@@ -328,7 +329,7 @@ cmake --build .
 1. Реализовать функционал работы с портам UDP и COM.
 2. Реализовать возможность использования символов окончания сообщения, для того чтобы прекращать чтение данных из буфера 
 сокета после того как такой символ был прочитан (сейчас применяется параметр delayReadingFromSocket).
-3. Использование сырых сокетов.
+3. Реализовать возможность использования сырых сокетов.
     
 Фичи ждут своих контрибьютеров.
 
