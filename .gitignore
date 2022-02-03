@@ -1,5 +1,7 @@
 # general things to ignore
-/.vs/
-/AddInNative_SynchClientServer*/.vs/
-/AddInNative_SynchClientServer*/bin*/
-/AddInNative_SynchClientServer*/build*/
+
+/windows/.vs/
+/windows/Release/
+/windows/x64/
+/windows/WindowsAddin/Release/
+/windows/WindowsAddin/x64/
