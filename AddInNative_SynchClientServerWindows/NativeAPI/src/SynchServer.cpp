@@ -610,13 +610,15 @@ void SynchClientServer::prosessLastRecordsFromLogHistory(const std::vector<logRe
 
 const clientConnection_ptr SynchClientServer::getCreateClientConnectionToRemoteServer(const portSettings_ptr & portSettings)
 {
-	std::unique_lock<std::mutex> lk_connections(connections_mutex);
-	
-	int portNumber = portSettings->getPortNumber();
-	std::string remoteIP = portSettings->getRemoteIP();
-	for (auto it = clientsConnections.rbegin(); it != clientsConnections.rend(); ++it) {
-		if ((*it)->getPortNumber() == portNumber && (*it)->getRemoteIP() == remoteIP) {
-			return *it;
+	{
+		std::unique_lock<std::mutex> lk_connections(connections_mutex);
+
+		int portNumber = portSettings->getPortNumber();
+		std::string remoteIP = portSettings->getRemoteIP();
+		for (auto it = clientsConnections.rbegin(); it != clientsConnections.rend(); ++it) {
+			if ((*it)->getPortNumber() == portNumber && (*it)->getRemoteIP() == remoteIP) {
+				return *it;
+			}
 		}
 	}
 	
@@ -633,6 +635,8 @@ const clientConnection_ptr SynchClientServer::getCreateClientConnectionToRemoteS
 	bool successfully = newConnection_->reconnectSocketRemoteServer();
 	if (successfully) {
 		newConnection_->acceptConnection();	
+		
+		std::unique_lock<std::mutex> lk_connections(connections_mutex);
 		clientsConnections.push_back(newConnection_);
 		
 		return newConnection_;		
