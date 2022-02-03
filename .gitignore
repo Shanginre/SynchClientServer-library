@@ -1,5 +1,6 @@
 # general things to ignore
 
+/bin/
 /windows/.vs/
 /windows/Release/
 /windows/x64/
