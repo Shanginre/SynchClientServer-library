@@ -5,8 +5,8 @@
 [![License](https://img.shields.io/pypi/l/OPCDataTransfer)](https://en.wikipedia.org/wiki/MIT_License)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Shanginre/AddInNative_SynchClientServer)](https://github.com/Shanginre/AddInNative_SynchClientServer/releases)
 
-Внешняя Native API компонента для 1C 8.3, которая реализует синхронный TCP-сервер. Основное назначение компоненты - 
-работа в режиме TCP сервера, но она также может использоваться как TCP-клиент. Компонента реализована на C++ 
+Внешняя Native API компонента для 1C 8.3, которая реализует синхронный TCP сервер. Основное назначение компоненты - 
+работа в режиме TCP сервера, но она также может использоваться как TCP клиент. Компонента реализована на C++ 
 с использованием библиотек [Boost](https://www.boost.org/). Работа с сокетами реализована с использованием библиотеки 
 [Boost.Asio](https://www.boost.org/doc/libs/1_75_0/doc/html/boost_asio/overview.html).
 
