@@ -429,7 +429,9 @@ void SynchClientServer::getLastRecordsFromLogHistoryImpl(Biterp::CallContext& ct
 		prosessLastRecordsFromLogHistory(logHistory, recordsNumber, onlyNew);
 	}
 
-	ctx.setStringResult(u16Converter.from_bytes(logsJsonString));
+	std::string logsJsonStringLocale = boost::locale::conv::utf_to_utf<char>(logsJsonString.c_str());
+
+	ctx.setStringResult(u16Converter.from_bytes(logsJsonStringLocale));
 }
 
 bool SynchClientServer::getLoggingRequired()
@@ -455,8 +457,9 @@ void SynchClientServer::accept_connections_thread(const portSettings_ptr & portS
 		if (isThreadInterrupted())
 			break;
 		
+		synchServer_Wptr weak_ptr_this(shared_from_this());
 		clientConnection_ptr newConnection_(
-			new ClientConnection(boost::ref(service_io), portSettings, weak_from_this())
+			new ClientConnection(boost::ref(service_io), portSettings, weak_ptr_this)
 		);
 		
 		boost::system::error_code err;
@@ -598,7 +601,6 @@ void SynchClientServer::sendMessagesToConnection(const clientConnection_ptr & cl
 	std::unique_lock<std::mutex> lk(outgoingMessages_mutex);
 	
 	const std::string & clientSocketUuidString = clientConnection->getClientSocketUuidString();
-	bool sendWithDelay = false;
 	for (auto const& message_ptr : outgoingMessages) {
 		const std::string & m_clientSocketUuidString = message_ptr->getClientSocketUuidStringRef();
 		bool isMessageForThisConnection = clientSocketUuidString == m_clientSocketUuidString;
@@ -606,12 +608,8 @@ void SynchClientServer::sendMessagesToConnection(const clientConnection_ptr & cl
 		if (isMessageForThisConnection
 			&& !message_ptr->isMessageProcessingCompleted()) {		
 			message_ptr->takeMesssageInProsessing();
-			clientConnection->sendMessage(message_ptr, sendWithDelay);
+			clientConnection->sendMessage(message_ptr);
 			message_ptr->completeProsessingMesssage();
-			
-			// delay only for the second and following messages
-			if (sendWithDelay) 
-				sendWithDelay = true;
 		}
 	}
 }
@@ -654,15 +652,16 @@ const clientConnection_ptr SynchClientServer::getCreateClientConnectionToRemoteS
 		return std::shared_ptr<ClientConnection>(nullptr);
 	}
 
-	clientConnection_ptr åxistingÑonnection = getExistingClientConnectionToRemoteServer(portSettings);
-	if (åxistingÑonnection) {
-		return åxistingÑonnection;
+	clientConnection_ptr existingConnection = getExistingClientConnectionToRemoteServer(portSettings);
+	if (existingConnection) {
+		return existingConnection;
 	}
 
 	// can not find existing connection. Create new one and try to establish connection
 
+	synchServer_Wptr weak_ptr_this(shared_from_this());
 	clientConnection_ptr newConnection_(
-		new ClientConnection(boost::ref(service_io), portSettings, weak_from_this())
+		new ClientConnection(boost::ref(service_io), portSettings, weak_ptr_this)
 	);
 
 	bool successfully = newConnection_->reconnectSocketRemoteServer();
@@ -787,9 +786,9 @@ bool ClientConnection::readDataFromSocket()
 	return haveNewData;
 }
 
-void ClientConnection::sendMessage(const message_ptr &message, bool withDelay)
+void ClientConnection::sendMessage(const message_ptr &message)
 {
-	if (withDelay)
+	if (delayMessageSending_ > 0)
 		std::this_thread::sleep_for(std::chrono::milliseconds(delayMessageSending_));
 	
 	if (synchServer_Sptr server_shp = server_.lock()) {

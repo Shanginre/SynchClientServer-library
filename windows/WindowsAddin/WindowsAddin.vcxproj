@@ -78,18 +78,18 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>E:\dev\rapidjson-master\include;$(ProjectDir)..\..\lib\win_$(Platform)\cfg_$(Configuration);$(LibraryPath)</LibraryPath>
-    <IncludePath>$(ProjectDir)..\..\src\;$(ProjectDir)..\..\src\windows\;$(VC_IncludePath);E:\dev\rapidjson-master\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\REShangin\Documents\dev\rapidjson-master\include;$(ProjectDir)..\..\lib\win_$(Platform)\cfg_$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\src\;$(ProjectDir)..\..\src\windows\;$(VC_IncludePath);C:\Users\REShangin\Documents\dev\rapidjson-master\include;$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>E:\dev\rapidjson-master\include;$(ProjectDir)..\..\lib\win_$(Platform)\cfg_$(Configuration);$(LibraryPath)</LibraryPath>
-    <IncludePath>E:\dev\rapidjson-master\include;$(ProjectDir)..\..\src\;$(ProjectDir)..\..\src\windows\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\REShangin\Documents\dev\rapidjson-master\include;$(ProjectDir)..\..\lib\win_$(Platform)\cfg_$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\REShangin\Documents\dev\rapidjson-master\include;$(ProjectDir)..\..\src\;$(ProjectDir)..\..\src\windows\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>E:\dev\rapidjson-master\include;$(ProjectDir)..\..\lib\win_$(Platform)\cfg_$(Configuration);$(LibraryPath)</LibraryPath>
-    <IncludePath>E:\dev\rapidjson-master\include;$(ProjectDir)..\..\src\;$(ProjectDir)..\..\src\windows\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\REShangin\Documents\dev\rapidjson-master\include;$(ProjectDir)..\..\lib\win_$(Platform)\cfg_$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\REShangin\Documents\dev\rapidjson-master\include;$(ProjectDir)..\..\src\;$(ProjectDir)..\..\src\windows\;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -123,7 +123,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>E:\dev\boost_1_72_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\REShangin\Documents\dev\boost_1_72_0</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
@@ -134,7 +134,7 @@
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>AddinNative.def</ModuleDefinitionFile>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>E:\dev\boost_1_72_0\stage\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\REShangin\Documents\dev\boost_1_72_0\stage\x86</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -146,7 +146,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>E:\dev\boost_1_72_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\REShangin\Documents\dev\boost_1_72_0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,7 +155,7 @@
       <ModuleDefinitionFile>AddinNative.def</ModuleDefinitionFile>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <Profile>true</Profile>
-      <AdditionalLibraryDirectories>E:\dev\boost_1_72_0\stage\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\REShangin\Documents\dev\boost_1_72_0\stage\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -169,7 +169,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>E:\dev\boost_1_72_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\REShangin\Documents\dev\boost_1_72_0</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -181,7 +181,7 @@
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>AddinNative.def</ModuleDefinitionFile>
       <AdditionalDependencies>Crypt32.lib;Iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>E:\dev\boost_1_72_0\stage\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\REShangin\Documents\dev\boost_1_72_0\stage\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

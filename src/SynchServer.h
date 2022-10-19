@@ -207,7 +207,7 @@ public:
 
 	void acceptConnection();
 	bool readDataFromSocket();
-	void sendMessage(const message_ptr &message, bool withDelay);
+	void sendMessage(const message_ptr &message);
 	bool isTimedOut();
 	void closeSocket();
 	bool reconnectSocketRemoteServer();
