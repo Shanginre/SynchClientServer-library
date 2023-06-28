@@ -60,6 +60,9 @@ void SynchClientServer::setServerParametersImpl(Biterp::CallContext& ctx) {
 
 void SynchClientServer::listenImpl(Biterp::CallContext& ctx)
 {
+	if (getLoggingRequired())
+		addLogInFile("DEBUG: start listenImpl()");
+	
 	std::string errorDescription;
 	
 	if (state == RUNNING)
@@ -326,6 +329,9 @@ void SynchClientServer::stopServerImpl(Biterp::CallContext& ctx)
 
 void SynchClientServer::stopServer_()
 {
+	if (getLoggingRequired())
+		addLogInFile("DEBUG: start stopServer_()");
+	
 	if (state != RUNNING)
 		return;
 
@@ -366,6 +372,9 @@ void SynchClientServer::sendTerminationSignalToRunningInstanceOfServerImpl(Biter
 
 void SynchClientServer::terminateServer()
 {
+	if (getLoggingRequired())
+		addLogInFile("DEBUG: start terminateServer()");
+	
 	std::unique_lock<std::mutex> lk(stopServer_mutex);
 
 	service_io.post([this]() {
@@ -373,6 +382,9 @@ void SynchClientServer::terminateServer()
 	});
 	service_io.stop();
 	stopServer_();
+
+	if (getLoggingRequired())
+		addLogInFile("DEBUG: done terminateServer()");
 }
 
 void SynchClientServer::addLog(const std::string &recordBody)
@@ -494,6 +506,9 @@ void SynchClientServer::clean_thread()
 {
 	while (true) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(memoryCleaningFrequency));
+		if (getLoggingRequired())
+			addLogInFile("DEBUG: start clean_thread()");
+
 		std::unique_lock<std::mutex> lk_incomingMessages(incomingMessages_mutex,	std::defer_lock);
 		std::unique_lock<std::mutex> lk_outgoingMessages(outgoingMessages_mutex,	std::defer_lock);
 		std::unique_lock<std::mutex> lk_connections(connections_mutex,				std::defer_lock);
@@ -531,6 +546,9 @@ void SynchClientServer::clean_thread()
 			outgoingMessages.end()
 		);
 		lk_outgoingMessages.unlock();
+
+		if (getLoggingRequired())
+			addLogInFile("DEBUG: done clean_thread()");
 	}
 }
 
@@ -648,6 +666,9 @@ void SynchClientServer::prosessLastRecordsFromLogHistory(const std::vector<logRe
 
 const clientConnection_ptr SynchClientServer::getCreateClientConnectionToRemoteServer(const portSettings_ptr & portSettings)
 {
+	if (getLoggingRequired())
+		addLogInFile("DEBUG: start getCreateClientConnectionToRemoteServer()");
+	
 	if (portSettings->getRemoteIP().empty()) {
 		return std::shared_ptr<ClientConnection>(nullptr);
 	}
@@ -671,9 +692,15 @@ const clientConnection_ptr SynchClientServer::getCreateClientConnectionToRemoteS
 		std::unique_lock<std::mutex> lk_connections(connections_mutex);
 		clientsConnections.push_back(newConnection_);
 		
+		if (getLoggingRequired())
+			addLogInFile("DEBUG: done getCreateClientConnectionToRemoteServer()");
+
 		return newConnection_;		
 	}
 	else {
+		if (getLoggingRequired())
+			addLogInFile("DEBUG: done getCreateClientConnectionToRemoteServer()");
+
 		return std::shared_ptr<ClientConnection>(nullptr);
 	}
 }
@@ -749,26 +776,45 @@ bool ClientConnection::readDataFromSocket()
 		
 		if (synchServer_Sptr server_shp = server_.lock()) {
 			if (server_shp->getLoggingRequired())
-				server_shp->addLogInFile("start reading from socket");
+				server_shp->addLogInFile("DEBUG: start reading from socket");
 		}		
 		
-		haveNewData = true;		
-		refreshLastActivityTime();
+		haveNewData = true;
+		int numberReadAttempts = 0;
 		std::size_t bytes_readable = 0;
 		while (!bytes_readable)
 		{
 			// waiting for all the data to be loaded into the buffer.
 			// Needed when receiving data without termination character
 			std::this_thread::sleep_for(std::chrono::milliseconds(delayReadingFromSocket_));
+			numberReadAttempts++;
 
 			// Issue command to socket to get number of bytes readable.
 			boost::asio::socket_base::bytes_readable num_of_bytes_readable(true);
 			socket_.io_control(num_of_bytes_readable);
+
+			if (synchServer_Sptr server_shp = server_.lock()) {
+				if (server_shp->getLoggingRequired())
+					server_shp->addLogInFile("DEBUG: reading from socket (step 1)");
+			}
+
 			// Get the value from the command.
 			bytes_readable = num_of_bytes_readable.get();
+			
+			if (synchServer_Sptr server_shp = server_.lock()) {
+				if (server_shp->getLoggingRequired())
+					server_shp->addLogInFile("DEBUG: reading from socket (step 2)");
+			}
+
+			// sometimes, with available socket, the amount of data to be read is 0. 
+			// If no data has been received within 10 attempts - break the loop
+			if (numberReadAttempts > 10)
+				break;
 		}
 		buffer_.resize(bytes_readable);
 		socket_.receive(boost::asio::buffer(buffer_, bytes_readable));
+
+		refreshLastActivityTime();
 
 		if (synchServer_Sptr server_shp = server_.lock()) {
 			if (server_shp->getLoggingRequired()) {
@@ -793,7 +839,7 @@ void ClientConnection::sendMessage(const message_ptr &message)
 	
 	if (synchServer_Sptr server_shp = server_.lock()) {
 		if (server_shp->getLoggingRequired())
-			server_shp->addLogInFile("start writing to socket");
+			server_shp->addLogInFile("DEBUG: start writing to socket");
 	}
 
 	boost::system::error_code err;
@@ -838,7 +884,7 @@ void ClientConnection::closeSocket()
 {
 	if (synchServer_Sptr server_shp = server_.lock()) {
 		if (server_shp->getLoggingRequired())
-			server_shp->addLogInFile("start closing socket");
+			server_shp->addLogInFile("DEBUG: start closing socket");
 	}
 
 	boost::system::error_code err;
@@ -857,6 +903,11 @@ void ClientConnection::closeSocket()
 
 bool ClientConnection::reconnectSocketRemoteServer()
 {
+	if (synchServer_Sptr server_shp = server_.lock()) {
+		if (server_shp->getLoggingRequired())
+			server_shp->addLogInFile("DEBUG: start reconnectSocketRemoteServer()");
+	}
+
 	boost::system::error_code err;
 	
 	socket_.close(err);
