@@ -339,6 +339,8 @@ void SynchClientServer::stopServer_()
 
 	allThreadsNeedToTerminate.store(true, std::memory_order_seq_cst);
 
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
 	// establish temporary connections on all server ports to exit loops in the accept_connections_thread thread, 
 	// since the acceptor.accept () method is blocking
 	for (auto const& portSettingPair : portsSettings) {
@@ -376,12 +378,16 @@ void SynchClientServer::terminateServer()
 		addLogInFile("DEBUG: start terminateServer()");
 	
 	std::unique_lock<std::mutex> lk(stopServer_mutex);
+	
+	stopServer_();
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
 	service_io.post([this]() {
 		work_io.reset(); // let io_service run out of work
 	});
 	service_io.stop();
-	stopServer_();
+	
 
 	if (getLoggingRequired())
 		addLogInFile("DEBUG: done terminateServer()");
@@ -483,6 +489,9 @@ void SynchClientServer::accept_connections_thread(const portSettings_ptr & portS
 		std::unique_lock<std::mutex> lk_connections(connections_mutex);
 		clientsConnections.push_back(newConnection_);
 	}
+
+	if (loggingRequired)
+		addLog("finish accept_connections_thread");
 }
 
 void SynchClientServer::handle_connections_thread() {
@@ -500,6 +509,9 @@ void SynchClientServer::handle_connections_thread() {
 			sendMessagesToConnection(clientConnection_ptr);
 		}
 	}
+
+	if (loggingRequired)
+		addLog("finish handle_connections_thread");
 }
 
 void SynchClientServer::clean_thread()
